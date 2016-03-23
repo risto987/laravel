@@ -1,23 +1,40 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\NiceAction;
 
 class NiceActionController extends Controller {
 
-    public function getNiceAction($action, $name = null)
+    public function getHome()
     {
-        return view('actions.'.$action, ['name'=>$name] );
+        $actions = NiceAction::all();
+        return view('home',['actions' => $actions]);
     }
 
-    public function postNiceAction(Request $request)
+    public function getNiceAction($action, $name = null)
     {
-        if(isset($request['action'])&& $request['name']){
-            if(strlen($request['name'])>0){
-                return view('actions.nice', ['action'=>$request['action'], 'name'=>$this->transformName($request['name'])]);
-            }
-            return redirect()->back();
+        if($name === null){
+            $name = 'you';
         }
-        return redirect()->back();
+        return view( 'actions.nice', ['action'=>$action, 'name'=>$name] );
+    }
+
+    public function postInsertNiceAction(Request $request)
+    {
+        $this->validate($request, [
+            'name'       => 'required|alpha|unique:nice_actions',
+            'niceness'   => 'required|numeric'
+        ]);
+
+        $action = new NiceAction();
+        $action->name = ucfirst(strtolower($request['name']));
+        $action->niceness = $request['niceness'];
+        $action->save();
+
+        $actions = NiceAction::all();
+        return redirect()->route('home');
+//        return view('actions.nice', ['action'=>$request['action'], 'name'=>$this->transformName($request['name'])]);
+
     }
 
     public function transformName($name)

@@ -7,22 +7,38 @@
 
     <hr/>
 
-  <ul>
-        <li><a href="{{ route('niceaction',['action'=>'greet']) }}">Greet</a></li>
-        <li><a href="{{ route('niceaction',['action'=>'hug']) }}">Hug</a></li>
-        <li><a href="{{ route('niceaction',['action'=>'kiss']) }}">Kiss</a></li>
+    @if(count($errors)>0)
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
 
-        <form action="{{route('benice')}}" method="post">
-            <label for="select-field">I want to...</label>
-            <select name="action" id="select-field">
-                <option value="greet">Greet</option>
-                <option value="hug">Hug</option>
-                <option value="kiss">Kiss</option>
-            </select>
-            <input type="text" name="name"/>
+    @foreach($actions as $action)
+        <a href="{{ route('niceaction', ['action'=>lcfirst($action->name)]) }}">{{$action->name}}</a>
+    @endforeach
+
+    {{--<ul>--}}
+        {{--<li><a href="{{ route('niceaction',['action'=>'greet']) }}">Greet</a></li>--}}
+        {{--<li><a href="{{ route('niceaction',['action'=>'hug']) }}">Hug</a></li>--}}
+        {{--<li><a href="{{ route('niceaction',['action'=>'kiss']) }}">Kiss</a></li>--}}
+
+        <form action="{{route('do_action')}}" method="post">
+            {{--<label for="select-field">I want to...</label>--}}
+            {{--<select name="action" id="select-field">--}}
+                {{--<option value="greet">Greet</option>--}}
+                {{--<option value="hug">Hug</option>--}}
+                {{--<option value="kiss">Kiss</option>--}}
+            {{--</select>--}}
+            <label for="name">Name of action</label>
+            <input type="text" name="name" id="name"/>
+            <label for="niceness">Niceness</label>
+            <input type="text" name="niceness" id="name"/>
             <button type="submit">Do a nice action</button>
             <input type="hidden" value="{{Session::token()}}" name="_token"/>
         </form>
 
-  </ul>
+    {{--</ul>--}}
+
 @endsection

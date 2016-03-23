@@ -11,14 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
-
-Route::get('/action/{name?}', [
-    'uses'=>'NiceActionController@getNiceAction',
-    'as'=>'niceaction'
-]);
+//Route::get('/', function () {
+//    return view('home');
+//})->name('home');
+//
+//Route::get('/action/{name?}', [
+//    'uses'=>'NiceActionController@getNiceAction',
+//    'as'=>'niceaction'
+//]);
 
 
 //Route::get('/greet/{name?}', function ($name=null) {
@@ -34,10 +34,12 @@ Route::get('/action/{name?}', [
 //})->name('kiss');
 //
 //
-Route::post('/',[
-    'uses'=>'NiceActionController@postNiceAction',
-    'as'=>'benice'
-]);
+
+//Route::post('/',[
+//    'uses'=>'NiceActionController@postNiceAction',
+//    'as'=>'benice'
+//]);
+
 //Route::post('/benice', function(\Illuminate\Http\Request $request){
 //    if(isset($request['action'])&& $request['name']){
 //        if(strlen($request['name'])>0){
@@ -61,5 +63,20 @@ Route::post('/',[
 */
 
 Route::group(['middleware' => ['web']], function () {
-    //
+
+    Route::get('/',[
+        'uses'=>'NiceActionController@getHome',
+        'as'=>'home'
+    ]);
+
+    Route::get('/action/{name?}', [
+        'uses'=>'NiceActionController@getNiceAction',
+        'as'=>'niceaction'
+    ]);
+
+    Route::post('/do_action',[
+        'uses'=>'NiceActionController@postInsertNiceAction',
+        'as'=>'do_action'
+    ]);
+
 });
